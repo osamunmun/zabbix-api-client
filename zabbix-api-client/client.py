@@ -42,7 +42,8 @@ class Client(Borg):
                            'params': params,
                            'auth': (self.auth if hasattr(self, 'auth') else None),
                            'id': self.request_id})
+        self.logger.info('URL:%s\tMETHOD:%s\tPARAM:%s', self.host, method, str(params))
         r = requests.post(self.host, data=data, headers=headers)
-        self.logger.info('STATUS CODE: %s', r.status_code)
+        self.logger.info('STATUS_CODE:%s', r.status_code)
         return r.json()['result']
 
