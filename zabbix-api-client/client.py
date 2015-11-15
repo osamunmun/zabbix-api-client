@@ -1,6 +1,5 @@
 import requests
 import json
-import ipdb
 
 
 class Borg(object):
@@ -25,13 +24,15 @@ class Client(Borg):
         if not hasattr(self, 'auth'):
             self.auth = self.request('user.login', {'user': user, 'password': password})
 
+
     def request(self, method, params):
+        self.request_id += 1
         headers = {"Content-Type": "application/json-rpc"}
         data = json.dumps({'jsonrpc': '2.0',
                            'method': method,
                            'params': params,
                            'auth': (self.auth if hasattr(self, 'auth') else None),
                            'id': self.request_id})
-        r = requests.post(self.host, data=data, headers=headers).json()
-        return r['result']
+        r = requests.post(self.host, data=data, headers=headers)
+        return r.json()['result']
 
