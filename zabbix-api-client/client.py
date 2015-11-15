@@ -21,11 +21,12 @@ class Client(Borg):
         :param password: access user's password
         """
         Borg.__init__(self)
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
-        self.logger.addHandler(ch)
+        if not hasattr(self, 'logger'):
+            self.logger = logging.getLogger(__name__)
+            self.logger.setLevel(logging.INFO)
+            ch = logging.StreamHandler()
+            ch.setLevel(logging.INFO)
+            self.logger.addHandler(ch)
         self.logger.info('Start initializing')
         self.host = host
         self.request_id = 1
