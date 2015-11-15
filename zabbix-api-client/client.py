@@ -1,5 +1,6 @@
 import requests
 import json
+import logging
 
 
 class Borg(object):
@@ -12,6 +13,7 @@ class Client(Borg):
     """Zabbix API"""
 
     def __init__(self, host='', user='', password=''):
+
         """ Client instance Constructor
 
         :param host: zabbix host name
@@ -19,6 +21,12 @@ class Client(Borg):
         :param password: access user's password
         """
         Borg.__init__(self)
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        self.logger.addHandler(ch)
+        self.logger.info('Start initializing')
         self.host = host
         self.request_id = 1
         if not hasattr(self, 'auth'):
@@ -34,5 +42,6 @@ class Client(Borg):
                            'auth': (self.auth if hasattr(self, 'auth') else None),
                            'id': self.request_id})
         r = requests.post(self.host, data=data, headers=headers)
+        self.logger.info('STATUS CODE: %s', r.status_code)
         return r.json()['result']
 
