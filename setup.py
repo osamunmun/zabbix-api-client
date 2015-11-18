@@ -14,5 +14,5 @@ setup(
     author='Osamu Takayasu',
     author_email='osamu.takayasu@gmail.com',
     license='MIT',
-    packages=find_packages()
+    packages=['zabbix_api_client']
 )
