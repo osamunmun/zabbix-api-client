@@ -7,6 +7,7 @@ import dateutil.parser
 
 class Borg(object):
     _shared_state = {}
+
     def __init__(self):
         self.__dict__ = self._shared_state
 
@@ -25,7 +26,10 @@ class Client(Borg):
         Borg.__init__(self)
         if not hasattr(self, 'logger') or not self.logger:
             self.logger = logging.getLogger(__name__)
-            log_level = 'WARNING' if not 'log_level' in kwargs else kwargs['log_level'].upper()
+            if 'log_level' not in kwargs:
+                log_level = 'WARNING'
+            else:
+                log_level = kwargs['log_level'].upper()
             loglevel_obj = getattr(logging, log_level)
             self.logger.setLevel(loglevel_obj)
             ch = logging.StreamHandler()
@@ -35,19 +39,23 @@ class Client(Borg):
         self.host = kwargs['host'] + '/zabbix/api_jsonrpc.php'
         self.request_id = 1
         if not hasattr(self, 'auth') or not self.auth:
-            self.auth = self.request('user.login', {'user': kwargs['user'],
-                                                    'password': kwargs['password']})
-
+            self.auth = self.request('user.login', {
+                'user': kwargs['user'],
+                'password': kwargs['password']
+            })
 
     def request(self, method, params):
         self.request_id += 1
         headers = {"Content-Type": "application/json-rpc"}
-        data = json.dumps({'jsonrpc': '2.0',
-                           'method': method,
-                           'params': params,
-                           'auth': (self.auth if hasattr(self, 'auth') else None),
-                           'id': self.request_id})
-        self.logger.info('URL:%s\tMETHOD:%s\tPARAM:%s', self.host, method, str(params))
+        data = json.dumps({
+            'jsonrpc': '2.0',
+            'method': method,
+            'params': params,
+            'auth': (self.auth if hasattr(self, 'auth') else None),
+            'id': self.request_id
+        })
+        self.logger.info('URL:%s\tMETHOD:%s\tPARAM:%s',
+                         self.host, method, str(params))
         try:
             r = requests.post(self.host, data=data, headers=headers)
             if 'error' in r.json():

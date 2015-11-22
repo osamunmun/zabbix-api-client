@@ -1,4 +1,4 @@
-from client import Client
+from zabbix_api_client.client import Client
 
 SCHEMA = {
     'type': 'object',
@@ -79,7 +79,7 @@ class Maintenance(Client):
         }
         update_schema.update(SCHEMA)
         params['active_since'] = self.unixtime(params['active_since'])
-        params['active_till']  = self.unixtime(params['active_till'])
+        params['active_till'] = self.unixtime(params['active_till'])
         get_res = self.get({
             'maintenanceids': [params['maintenanceid']]
         })[0]
