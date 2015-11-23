@@ -47,7 +47,7 @@ class Maintenance(Client):
     """Zabbix Maintenance API"""
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(Maintenance, self).__init__(**kwargs)
 
     def create(self, params={}):
         return self.request('maintenance.create', params)
