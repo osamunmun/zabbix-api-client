@@ -35,8 +35,11 @@ class Client(Borg):
             ch = logging.StreamHandler()
             ch.setLevel(logging.INFO)
             self.logger.addHandler(ch)
+        if not hasattr(self, 'logger') or not self.logger:
+            self.logger = logging.getLogger(__name__)
         self.logger.info('Start initializing')
-        self.host = kwargs['host'] + '/zabbix/api_jsonrpc.php'
+        if not hasattr(self, 'host') or not self.host:
+            self.host = kwargs['host'] + '/zabbix/api_jsonrpc.php'
         self.request_id = 1
         if not hasattr(self, 'auth') or not self.auth:
             self.auth = self.request('user.login', {
@@ -58,11 +61,13 @@ class Client(Borg):
                          self.host, method, str(params))
         try:
             r = requests.post(self.host, data=data, headers=headers)
+            import ipdb;ipdb.set_trace()
             if 'error' in r.json():
                 raise Exception(r.json()['error'])
             self.logger.info('STATUS_CODE:%s', r.status_code)
             return r.json()['result']
         except Exception as e:
+            import ipdb;ipdb.set_trace()
             self.logger.error('TYPE:%s\tMESSAGE:%s', str(type(e)), e.args)
 
     def validate(self, params, schema):
