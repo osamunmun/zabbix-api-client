@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 long_description = open('./README.rst').read()
 
@@ -6,7 +6,9 @@ setup(
     name="zabbix-api-client",
     version="0.0.1",
     install_requires=[
-      'requests==2.8.1'
+        'requests==2.8.1',
+        'jsonschema>=2.5.1',
+        'python-dateutil>=2.4.2'
     ],
     description='Zabbix API client library',
     long_description=long_description,
@@ -14,5 +16,5 @@ setup(
     author='Osamu Takayasu',
     author_email='osamu.takayasu@gmail.com',
     license='MIT',
-    packages=find_packages()
+    packages=['zabbix_api_client']
 )
