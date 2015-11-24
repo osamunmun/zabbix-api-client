@@ -78,17 +78,18 @@ class Maintenance(Client):
             ]
         }
         update_schema.update(SCHEMA)
+        self.validate(params, update_schema)
         params['active_since'] = self.unixtime(params['active_since'])
         params['active_till'] = self.unixtime(params['active_till'])
         get_res = self.get({
             'maintenanceids': [params['maintenanceid']]
         })[0]
         for key in ('timeperiods', 'hosts', 'groups'):
-            params[key] = get_res[key]
+            if key in get_res:
+                params[key] = get_res[key]
         params['timeperiods'] = get_res['timeperiods']
-        if len(get_res['hosts']) > 0:
+        if 'hosts' in get_res and len(get_res['hosts']) > 0:
             params['hostids'] = [get_res['hosts'][0]['hostid']]
-        if len(get_res['groups']) > 0:
+        if 'groups' in get_res and len(get_res['groups']) > 0:
             params['groupids'] = [get_res['groups'][0]['groupid']]
-        self.validate(params, update_schema)
         return self.request('maintenance.update', params)
