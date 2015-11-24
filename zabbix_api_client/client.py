@@ -61,13 +61,11 @@ class Client(Borg):
                          self.host, method, str(params))
         try:
             r = requests.post(self.host, data=data, headers=headers)
-            import ipdb;ipdb.set_trace()
             if 'error' in r.json():
                 raise Exception(r.json()['error'])
             self.logger.info('STATUS_CODE:%s', r.status_code)
             return r.json()['result']
         except Exception as e:
-            import ipdb;ipdb.set_trace()
             self.logger.error('TYPE:%s\tMESSAGE:%s', str(type(e)), e.args)
 
     def validate(self, params, schema):
