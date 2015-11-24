@@ -15,16 +15,16 @@ class TestMaintenance(TestCase):
 
     @responses.activate
     def test_get_with_valid_params(self):
-        # responses.add(
-        #     responses.POST, 'https://example.com/zabbix/api_jsonrpc.php',
-        #     body=json.dumps({
-        #         'result': 'authentication_token',
-        #         'id': 1,
-        #         'jsonrpc': '2.0'
-        #     }),
-        #     status=200,
-        #     content_type='application/json'
-        # )
+        responses.add(
+            responses.POST, 'https://example.com/zabbix/api_jsonrpc.php',
+            body=json.dumps({
+                'result': 'authentication_token',
+                'id': 1,
+                'jsonrpc': '2.0'
+            }),
+            status=200,
+            content_type='application/json'
+        )
         m = self._makeOne(
             host='https://example.com',
             user='osamunmun',

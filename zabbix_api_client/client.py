@@ -59,14 +59,12 @@ class Client(Borg):
         })
         self.logger.info('URL:%s\tMETHOD:%s\tPARAM:%s',
                          self.host, method, str(params))
-        try:
-            r = requests.post(self.host, data=data, headers=headers)
-            if 'error' in r.json():
-                raise Exception(r.json()['error'])
-            self.logger.info('STATUS_CODE:%s', r.status_code)
-            return r.json()['result']
-        except Exception as e:
+        r = requests.post(self.host, data=data, headers=headers)
+        if 'error' in r.json():
             self.logger.error('TYPE:%s\tMESSAGE:%s', str(type(e)), e.args)
+            raise Exception(r.json()['error'])
+        self.logger.info('STATUS_CODE:%s', r.status_code)
+        return r.json()['result']
 
     def validate(self, params, schema):
         jsonschema.validate(params, schema)
