@@ -6,7 +6,7 @@ setup(
     name="zabbix-api-client",
     version="0.0.1",
     install_requires=[
-        'requests==2.8.1',
+        'requests==2.20.0',
         'jsonschema>=2.5.1',
         'python-dateutil>=2.4.2'
     ],
